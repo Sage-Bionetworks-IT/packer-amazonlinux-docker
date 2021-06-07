@@ -24,7 +24,7 @@ packer validate -var 'ImageName=my-test-image' -var 'SourceImage=base-ami' templ
 To run a build you must have an AWS account and access to EC2.
 
 * Request acces to AWS [Imagecentral](https://github.com/Sage-Bionetworks/imagecentral-infra) account
-* Setup your AWS profile for AWS CLI access to AWS  
+* Setup your AWS profile for AWS CLI access to AWS
 ```
 [profile packer-service-imagecentral]
 region = us-east-1
