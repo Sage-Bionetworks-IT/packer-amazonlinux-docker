@@ -1,5 +1,5 @@
-# packer-ami-template
-A template for quickly getting a new packer AWS AMI project started.
+# packer-amazonlinux-docker
+A project to build an AMI on amazon linux 2 with docker.
 
 ## Naming
 **IMPORTANT**: Our naming convention is `packer-<image name>` (i.e. packer-base-ubuntu-bionic).
