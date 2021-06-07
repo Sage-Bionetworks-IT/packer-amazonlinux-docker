@@ -8,11 +8,11 @@ install:
 before_script:
   - path=$(pwd)
   - export REPO_NAME="${path##*/}"
-# Setup AWS CLI
+# Setup AWS CLI profile
   - mkdir -p ~/.aws
   - echo -e "[default]\nregion=us-east-1\nsource_profile=default\nrole_arn=$AwsCfServiceRoleArn" > ~/.aws/config
   - echo -e "[default]\nregion=us-east-1\naws_access_key_id=$AwsTravisAccessKey\naws_secret_access_key=$AwsTravisSecretAccessKey" > ~/.aws/credentials
-# Setup packer configs
+# Setup packer params
   - export IMAGE_NAME="${REPO_NAME}-${TRAVIS_BRANCH}"
   - export AWS_PROFILE="default"
   - export AWS_SOURCE_IMAGE_PATH="/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
@@ -32,11 +32,11 @@ jobs:
         - packer validate -var ImageName=${IMAGE_NAME} -var SourceImage="some_aws_image_path" template.json
     - stage: deploy-branch
       script:
-        - export SOURCE_IMAGE=$(aws ssm get-parameters --profile ${AWS_PROFILE} --names ${AWS_SOURCE_IMAGE_PATH} --query 'Parameters[0].[Value]' --output text)
+        - export LATEST_AMI=$(aws ssm get-parameters --profile ${AWS_PROFILE} --names ${AWS_SOURCE_IMAGE_PATH} --query 'Parameters[0].[Value]' --output text)
         - pushd src
-        - travis-wait-improved --timeout 30m packer build -force -var PACKER_LOG=1 -var AwsProfile=${AWS_PROFILE} -var -var ImageName=${IMAGE_NAME} -var SourceImage=${SOURCE_IMAGE} template.json
+        - travis-wait-improved --timeout 30m packer build -force -var PACKER_LOG=1 -var AwsProfile=${AWS_PROFILE} -var ImageName=${IMAGE_NAME} -var SourceImage=${LATEST_AMI} template.json
     - stage: deploy-tag
       script:
-        - export SOURCE_IMAGE=$(aws ssm get-parameters --profile ${AWS_PROFILE} --names ${AWS_SOURCE_IMAGE_PATH} --query 'Parameters[0].[Value]' --output text)
+        - export LATEST_AMI=$(aws ssm get-parameters --profile ${AWS_PROFILE} --names ${AWS_SOURCE_IMAGE_PATH} --query 'Parameters[0].[Value]' --output text)
         - pushd src
-        - travis-wait-improved --timeout 30m packer build -var PACKER_LOG=1 -var AwsProfile=${AWS_PROFILE} -var ImageName=${IMAGE_NAME} -var SourceImage=${SOURCE_IMAGE} template.json
+        - travis-wait-improved --timeout 30m packer build -var PACKER_LOG=1 -var AwsProfile=${AWS_PROFILE} -var ImageName=${IMAGE_NAME} -var SourceImage=${LATEST_AMI} template.json
