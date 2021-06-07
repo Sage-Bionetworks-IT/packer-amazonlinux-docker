@@ -1,9 +1,6 @@
 # packer-ami-template
 A template for quickly getting a new packer AWS AMI project started.
 
-__Note__: The files in this template are specifically to build a Ubuntu distribution.
-You may need to modify it slightly to work with other distros (redhat, aws linux, windows, etc..)
-
 ## Naming
 **IMPORTANT**: Our naming convention is `packer-<image name>` (i.e. packer-base-ubuntu-bionic).
 Please name your repo accordingly.  This naming convention helps us locate packer repos and
@@ -20,32 +17,49 @@ in [packer docs](https://www.packer.io/intro/getting-started/install.html)
 Choose an ImageName such as "my-test-image" and run
 ```
 cd src
-packer validate -var 'ImageName=my-test-image' template.json
+packer validate -var 'ImageName=my-test-image' -var 'SourceImage=base-ami' template.json
 ```
 
 ### AWS Access
 To run a build you must have an AWS account and access to EC2.
 
-* Request an IAM account in [Imagecentral](https://github.com/Sage-Bionetworks/imagecentral-infra)
-* Change password and set up MFA
-* Create an Access Key
-* Add your access code and secret key to `~/.aws/credentials`, using a profile such as "imagecentral.jsmith"
-* Authenticate with `awsmfa`, for example `awsmfa -i imagecentral.jsmith -t jsmith@imagecentral`
-* Finally, get the correct role ARN for the PackerServiceRole then add the following:
+* Request acces to AWS [Imagecentral](https://github.com/Sage-Bionetworks/imagecentral-infra) account
+* Setup your AWS profile for AWS CLI access to AWS  
 ```
 [profile packer-service-imagecentral]
 region = us-east-1
 role_arn = *****
 source_profile = jsmith@imagecentral
 ```
+* Alternatively you can use the AWS SSO CLI to login
 
 Now you will be able to build an image and deploy it to Imagecentral.
+
+### Get Source Image
+
+Packer requires a source AMI to base it's build off of.  You can get the
+[latest source image from AWS](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/)
+using the following command
+
+```bash
+aws ssm get-parameters \
+  --profile 'my-profile' \
+  --region 'us-east-1' \
+  --names '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2' \
+  --query 'Parameters[0].[Value]' \
+  --output text
+```
 
 ### Manual AMI Build
 If you would like to test building an AMI run:
 ```
 cd src
-packer build -var AwsProfile=packer-service-imagecentral -var AwsRegion=us-east-1 -var ImageName=my-test-image -var PACKER_LOG=1 template.json
+packer build \
+  -var AwsProfile=packer-service-imagecentral \
+  -var AwsRegion=us-east-1 \
+  -var ImageName=my-test-image \
+  -var SourceImage=ami-0d5eff06f840b45e9 \
+  -var PACKER_LOG=1 template.json
 ```
 
 Packer will do the following:

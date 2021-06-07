@@ -8,7 +8,7 @@
       "launch_block_device_mappings": [
         {
           "delete_on_termination": true,
-          "device_name": "/dev/sda1",
+          "device_name": "/dev/xvda",
           "volume_size": "{{user `VolumeSize`}}",
           "volume_type": "gp2"
         }
@@ -53,12 +53,12 @@
     "AmiGroups": "all",
     "Department": "Platform",
     "ImageName": "{{env `ImageName`}}",
-    "InstanceType": "t3.nano",
+    "InstanceType": "t3.micro",
     "OwnerEmail": "it@sagebase.org",
     "Project": "Infrastructure",
     "SnapshotGroups": "all",
-    "SourceImage": "ami-09ddd854571a732be",
-    "SshUsername": "ubuntu",
-    "VolumeSize": "8"
+    "SourceImage": "{{env `SourceImage`}}",
+    "SshUsername": "ec2-user",
+    "VolumeSize": "16"
   }
 }
