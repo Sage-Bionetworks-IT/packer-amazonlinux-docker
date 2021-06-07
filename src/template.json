@@ -14,7 +14,6 @@
         }
       ],
       "profile": "{{user `AwsProfile`}}",
-      "region": "{{user `AwsRegion`}}",
       "snapshot_groups": "{{user `SnapshotGroups`}}",
       "source_ami": "{{user `SourceImage`}}",
       "ssh_username": "{{user `SshUsername`}}",
@@ -52,12 +51,10 @@
   "variables": {
     "AmiGroups": "all",
     "Department": "Platform",
-    "ImageName": "{{env `ImageName`}}",
     "InstanceType": "t3.micro",
     "OwnerEmail": "it@sagebase.org",
     "Project": "Infrastructure",
     "SnapshotGroups": "all",
-    "SourceImage": "{{env `SourceImage`}}",
     "SshUsername": "ec2-user",
     "VolumeSize": "16"
   }
