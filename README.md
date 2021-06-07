@@ -44,7 +44,6 @@ using the following command
 ```bash
 aws ssm get-parameters \
   --profile 'my-profile' \
-  --region 'us-east-1' \
   --names '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2' \
   --query 'Parameters[0].[Value]' \
   --output text
@@ -56,7 +55,6 @@ If you would like to test building an AMI run:
 cd src
 packer build \
   -var AwsProfile=packer-service-imagecentral \
-  -var AwsRegion=us-east-1 \
   -var ImageName=my-test-image \
   -var SourceImage=ami-0d5eff06f840b45e9 \
   -var PACKER_LOG=1 template.json
