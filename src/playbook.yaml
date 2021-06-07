@@ -1,0 +1,12 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: install system packages
+      shell: "yes | aptdcon --hide-terminal --install 'build-essential'"
+
+    - name: install python packages
+      pip:
+        name:
+          - synapseclient
+        executable: pip3
