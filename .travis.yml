@@ -4,7 +4,7 @@ python: 3.7
 cache: pip
 install:
   - ./install_packer.sh || travis_terminate 1
-  - sudo snap install aws-cli
+  - sudo snap install aws-cli --classic
   - pip install pre-commit travis-wait-improved ansible
 before_script:
   - path=$(pwd)
