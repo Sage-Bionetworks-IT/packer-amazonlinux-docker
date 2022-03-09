@@ -20,7 +20,7 @@ install:
   - pip install pre-commit travis-wait-improved ansible
 before_script:
   - mkdir -p ~/.aws
-  - echo -e "[${AWS_PROFILE}]\nregion=${AWS_REGION}\nsource_profile=ci-user\nrole_arn=${AwsCfServiceRoleArn}" > ~/.aws/config
+  - echo -e "[profile ${AWS_PROFILE}]\nregion=${AWS_REGION}\nsource_profile=ci-user\nrole_arn=${AwsCfServiceRoleArn}" > ~/.aws/config
   - echo -e "[ci-user]\nregion=${AWS_REGION}\naws_access_key_id=${AwsTravisAccessKey}\naws_secret_access_key=${AwsTravisSecretAccessKey}" > ~/.aws/credentials
 stages:
   - name: validate
