@@ -10,7 +10,7 @@
           "delete_on_termination": true,
           "device_name": "/dev/xvda",
           "volume_size": "{{user `VolumeSize`}}",
-          "volume_type": "gp2"
+          "volume_type": "gp3"
         }
       ],
       "profile": "{{user `AwsProfile`}}",
