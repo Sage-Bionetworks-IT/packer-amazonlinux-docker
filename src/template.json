@@ -1,8 +1,13 @@
 {
   "builders": [
     {
+      "access_key": "{{user `aws_access_key`}}",
       "ami_groups": "{{user `AmiGroups`}}",
-      "ami_name": "{{user `ImageName`}}",
+      "ami_name": "{{user `AmiImageName`}}",
+      "assume_role": {
+        "role_arn": "{{user `aws_role_arn`}}"
+      },
+      "encrypt_boot": "{{user `EncryptBoot`}}",
       "force_delete_snapshot": "true",
       "instance_type": "{{user `InstanceType`}}",
       "launch_block_device_mappings": [
@@ -13,20 +18,32 @@
           "volume_type": "gp3"
         }
       ],
-      "profile": "{{user `AwsProfile`}}",
-      "region": "{{user `AwsRegion`}}",
+      "profile": "{{user `aws_profile`}}",
+      "region": "{{user `aws_region`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "shutdown_behavior": "terminate",
       "snapshot_groups": "{{user `SnapshotGroups`}}",
-      "source_ami": "{{user `SourceImage`}}",
+      "source_ami_filter": {
+        "filters": {
+          "name": "*amzn2-ami-*",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm",
+          "architecture": "x86_64"
+        },
+        "most_recent": true,
+        "owners": [
+          "amazon"
+        ]
+      },
       "ssh_username": "{{user `SshUsername`}}",
       "tags": {
         "BuiltBy": "Packer",
-        "Department": "{{user `Department`}}",
-        "Name": "{{user `ImageName`}}",
+        "Name": "{{user `AmiImageName`}}",
         "OwnerEmail": "{{user `OwnerEmail`}}",
-        "Project": "{{user `Project`}}",
         "SourceAmiId": "{{ .SourceAMI }}",
         "SourceAmiName": "{{ .SourceAMIName }}"
       },
+      "token": "{{user `aws_session_token`}}",
       "type": "amazon-ebs"
     }
   ],
@@ -39,11 +56,12 @@
   ],
   "provisioners": [
     {
-      "ansible_env_vars": [
-        "ANSIBLE_SSH_ARGS='-o IdentitiesOnly=yes'"
-      ],
       "extra_arguments": [
-        "-v"
+        "-v",
+        "--ssh-extra-args",
+        "-o IdentitiesOnly=yes -o HostKeyAlgorithms=+ssh-rsa -o PubkeyAcceptedAlgorithms=+ssh-rsa",
+        "--scp-extra-args",
+        "'-O'"
       ],
       "playbook_file": "playbook.yaml",
       "type": "ansible"
@@ -51,12 +69,17 @@
   ],
   "variables": {
     "AmiGroups": "all",
-    "Department": "Platform",
-    "InstanceType": "t3.micro",
+    "EncryptBoot": "false",
+    "InstanceType": "t3.small",
     "OwnerEmail": "it@sagebase.org",
-    "Project": "Infrastructure",
     "SnapshotGroups": "all",
     "SshUsername": "ec2-user",
-    "VolumeSize": "16"
+    "VolumeSize": "30",
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_profile": "{{env `AWS_PROFILE`}}",
+    "aws_region": "{{env `AWS_DEFAULT_REGION`}}",
+    "aws_role_arn": "{{env `AWS_ROLE_ARN`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_session_token": "{{env `AWS_SESSION_TOKEN`}}"
   }
 }

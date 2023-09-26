@@ -17,47 +17,32 @@ in [packer docs](https://www.packer.io/intro/getting-started/install.html)
 Choose an ImageName such as "my-test-image" and run
 ```
 cd src
-packer validate -var 'ImageName=my-test-image' -var 'SourceImage=base-ami' template.json
+packer validate -var 'AmiImageName=my-test-image' template.json
 ```
 
 ### AWS Access
 To run a build you must have an AWS account and access to EC2.
 
-* Request acces to AWS [Imagecentral](https://github.com/Sage-Bionetworks/imagecentral-infra) account
-* Setup your AWS profile for AWS CLI access to AWS
+* Request an IAM account in [Imagecentral](https://github.com/Sage-Bionetworks/imagecentral-infra)
+* Change password and set up MFA
+* Create an Access Key
+* Add your access code and secret key to `~/.aws/credentials`, using a profile such as "imagecentral.jsmith"
+* Authenticate with `awsmfa`, for example `awsmfa -i imagecentral.jsmith -t jsmith@imagecentral`
+* Finally, get the correct role ARN for the PackerServiceRole then add the following:
 ```
 [profile packer-service-imagecentral]
 region = us-east-1
 role_arn = *****
 source_profile = jsmith@imagecentral
 ```
-* Alternatively you can use the AWS SSO CLI to login
 
 Now you will be able to build an image and deploy it to Imagecentral.
-
-### Get Source Image
-
-Packer requires a source AMI to base it's build off of.  You can get the
-[latest source image from AWS](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/)
-using the following command
-
-```bash
-aws ssm get-parameters \
-  --profile 'my-profile' \
-  --names '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2' \
-  --query 'Parameters[0].[Value]' \
-  --output text
-```
 
 ### Manual AMI Build
 If you would like to test building an AMI run:
 ```
 cd src
-packer build \
-  -var AwsProfile=packer-service-imagecentral \
-  -var ImageName=my-test-image \
-  -var SourceImage=ami-0d5eff06f840b45e9 \
-  -var PACKER_LOG=1 template.json
+AWS_PROFILE=packer-service-imagecentral AWS_DEFAULT_REGION=us-east-1 packer build -var AmiImageName=my-test-image -var PACKER_LOG=1 template.json
 ```
 
 Packer will do the following:
