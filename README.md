@@ -4,7 +4,7 @@ A project to build an AMI on amazon linux 2 with docker.
 ## Naming
 **IMPORTANT**: Our naming convention is `packer-<image name>` (i.e. packer-base-ubuntu-bionic).
 Please name your repo accordingly.  This naming convention helps us locate packer repos and
-their corresponding builds in github and travis.
+their corresponding builds in github.
 
 ## Development
 
@@ -80,7 +80,7 @@ Packer will do the following:
 __Note__: The image will automatically be named gitrepo-branch (i.e. MyRepo-master)
 
 ### Versioning
-Versions are managed by git tags. When a tag is pushed travis will build
+Versions are managed by git tags. When a tag is pushed GH action will build
 an AMI for that tag. Tag builds are immutable for downstream dependencies.
 Once a tag build is generated the AMI for that build will never go away.
 
@@ -106,17 +106,17 @@ Requirements:
 * Run `pre-commit install` to install the git hook.
 
 ## Deployments
-Travis runs packer which temporarily deploys an EC2 to create an AMI.
+Github action runs packer which temporarily deploys an EC2 to create an AMI.
 
 ## Continuous Integration
-We have configured Travis to deploy updates.
+We have configured Github action to deploy updates.
 
 ## Issues
 * https://sagebionetworks.jira.com/projects/IT
 
 ## Builds
-We use travis CI to automatically build and deploy images. Setup a travis ci build
-and add the AWS deployment credentials to the travis environment variables.
+We use GH action CI to automatically build and deploy images. Setup a GH action CI build
+and configure the OIDC
 
 ## Secrets
 * We use the [AWS SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
