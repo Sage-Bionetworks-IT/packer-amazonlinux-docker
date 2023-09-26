@@ -28,7 +28,7 @@
           "name": "*amzn2-ami-*",
           "root-device-type": "ebs",
           "virtualization-type": "hvm",
-          "architecture": "arm64"
+          "architecture": "x86_64"
         },
         "most_recent": true,
         "owners": [
@@ -70,11 +70,11 @@
   "variables": {
     "AmiGroups": "all",
     "EncryptBoot": "false",
-    "InstanceType": "t3.micro",
+    "InstanceType": "t3.small",
     "OwnerEmail": "it@sagebase.org",
     "SnapshotGroups": "all",
     "SshUsername": "ec2-user",
-    "VolumeSize": "16",
+    "VolumeSize": "30",
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_profile": "{{env `AWS_PROFILE`}}",
     "aws_region": "{{env `AWS_DEFAULT_REGION`}}",
