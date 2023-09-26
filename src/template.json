@@ -25,10 +25,10 @@
       "snapshot_groups": "{{user `SnapshotGroups`}}",
       "source_ami_filter": {
         "filters": {
+          "architecture": "x86_64",
           "name": "*amzn2-ami-*",
           "root-device-type": "ebs",
-          "virtualization-type": "hvm",
-          "architecture": "x86_64"
+          "virtualization-type": "hvm"
         },
         "most_recent": true,
         "owners": [
