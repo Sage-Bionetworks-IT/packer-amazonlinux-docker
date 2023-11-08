@@ -3,22 +3,35 @@
 
 - hosts: all
   become: yes
-
   tasks:
     - name: Upgrade all packages
-      yum: name=* state=latest
+      yum:
+        name: "*"
+        state: latest
+        update_cache: true
 
     - name: Install system packages
       ansible.builtin.yum:
         name: "{{ item }}"
         state: present
       with_items:
-        - "curl"
         - "wget"
-        - "jq"
         - "git"
-        - "amazon-linux-extras"
-        - "docker"
+        - "python3-pip"
+        - "python3.11-pip"
+        - "ecs-init"
+
+    - name: Install python packages
+      ansible.builtin.pip:
+        name: "{{ item }}"
+      with_items:
+        - wheel
+        - synapseclient[pandas,pysftp]
+
+    - name: Install docker
+      ansible.builtin.yum:
+        name: "docker"
+        state: present
 
     - name: Start docker service
       ansible.builtin.service:
@@ -40,10 +53,14 @@
       with_items:
         - docker
 
-    - name: install python packages
-      ansible.builtin.pip:
-        name: "{{ item }}"
-        executable: pip3
-      with_items:
-        - docker-compose
-        - synapseclient[pandas,pysftp]
+    - name: Create docker plugin dir
+      ansible.builtin.file:
+        path: /usr/local/lib/docker/cli-plugins
+        state: directory
+        mode: '0755'
+
+    - name: Download docker-compose
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+        dest: /usr/local/lib/docker/cli-plugins/docker-compose
+        mode: +x
