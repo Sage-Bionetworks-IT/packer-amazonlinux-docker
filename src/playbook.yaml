@@ -19,6 +19,7 @@
         - "git"
         - "python3-pip"
         - "ecs-init"
+        - "aws-cfn-bootstrap"
 
     - name: Install python packages
       ansible.builtin.pip:
