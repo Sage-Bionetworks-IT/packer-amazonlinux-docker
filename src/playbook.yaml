@@ -18,6 +18,7 @@
         - "wget"
         - "git"
         - "python3-pip"
+        - "python3-wheel"
         - "ecs-init"
         - "aws-cfn-bootstrap"
         - "chkconfig"
@@ -25,9 +26,13 @@
     - name: Install python packages
       ansible.builtin.pip:
         name: "{{ item }}"
+        extra_args: "--target /usr/lib"
       with_items:
-        - wheel
         - synapseclient[pandas,pysftp]
+
+    - name: List all python packages
+      ansible.builtin.command:
+        cmd: pip3 freeze
 
     - name: Install docker
       ansible.builtin.yum:

@@ -24,6 +24,8 @@ jobs:
       - name: packer validate
         run: |
           pushd src
+          packer plugins install github.com/hashicorp/amazon
+          packer plugins install github.com/hashicorp/ansible
           packer validate -var AmiImageName=validate template.json
   deploy:
     name: Deploy to AWS org-sagebase-imagecentral
