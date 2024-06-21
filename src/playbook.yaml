@@ -19,10 +19,8 @@
         - "git"
         - "python3-pip"
         - "python3-wheel"
-        - "ecs-init"
         - "aws-cfn-bootstrap"
         - "chkconfig"
-        - "amazon-ssm-agent"
 
     - name: Install python packages
       ansible.builtin.pip:
