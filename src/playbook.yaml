@@ -43,15 +43,6 @@
         name: docker
         state: started
 
-    - name: Add users to the docker group
-      ansible.builtin.user:
-        name: "{{ item }}"
-        groups: docker
-        append: yes
-      with_items:
-        - ec2-user
-        - ssm-user
-
     - name: Make docker auto start
       ansible.builtin.service:
         name: "{{ item }}"
@@ -70,3 +61,20 @@
         url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
         dest: /usr/local/lib/docker/cli-plugins/docker-compose
         mode: +x
+
+    - name: Add users to the docker group
+      ansible.builtin.user:
+        name: "{{ item }}"
+        groups: docker
+        append: yes
+      with_items:
+        - ec2-user
+        - ssm-user
+
+    # ec2-user has this by default
+    - name: Give ssm-user paswordless sudo
+      community.general.sudoers:
+        name: ssm-user
+        user: ssm-user
+        commands: ALL
+        nopassword: true
