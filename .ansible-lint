@@ -1,11 +1,13 @@
 exclude_paths:
   - .
   - temp
+  - .github
+  - .pre-commit-config.yaml
 parseable: true
 quiet: true
 skip_list:
-  - 301
-  - 305
-  - 306
+  - "301"
+  - "305"
+  - "306"
 use_default_rules: true
 verbosity: 1
