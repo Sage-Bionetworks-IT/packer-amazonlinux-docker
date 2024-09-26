@@ -14,4 +14,3 @@ skip_list:
   - "fqcn[action-core]"
 use_default_rules: true
 verbosity: 1
-strict: false
