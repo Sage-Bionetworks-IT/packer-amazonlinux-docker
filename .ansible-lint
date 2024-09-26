@@ -1,5 +1,4 @@
 exclude_paths:
-  - .
   - temp
   - .github
   - .pre-commit-config.yaml
@@ -11,10 +10,8 @@ skip_list:
   - "306"
   - "name[play]"
   - "name[casing]"
-  - "fqcn-builtins"
   - "fqcn[action]"
   - "fqcn[action-core]"
-  - "syntax-check[unknown-module]"
 use_default_rules: true
-verbosity: 3
+verbosity: 1
 strict: false
