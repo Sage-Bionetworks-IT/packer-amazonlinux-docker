@@ -24,6 +24,7 @@ jobs:
           pushd src
           packer plugins install github.com/hashicorp/amazon
           packer plugins install github.com/hashicorp/ansible
+          ansible-galaxy collection install community.general
           packer validate -var AmiImageName=validate template.json
   deploy:
     name: Deploy to AWS org-sagebase-imagecentral
@@ -56,4 +57,5 @@ jobs:
         pushd src
         packer plugins install github.com/hashicorp/amazon
         packer plugins install github.com/hashicorp/ansible
+        ansible-galaxy collection install community.general
         AWS_DEFAULT_REGION=${{ env.AWS_REGION }} packer build -force -var AmiImageName=${{ env.AMI_IMAGE_NAME }} template.json
