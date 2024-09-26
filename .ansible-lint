@@ -3,7 +3,6 @@ exclude_paths:
   - .github
   - .pre-commit-config.yaml
 parseable: true
-quiet: true
 skip_list:
   - "301"
   - "305"
