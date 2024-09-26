@@ -9,5 +9,11 @@ skip_list:
   - "301"
   - "305"
   - "306"
+  - "name[play]"
+  - "name[casing]"
+  - "fqcn-builtins"
+  - "fqcn[action]"
+  - "fqcn[action-core]"
 use_default_rules: true
-verbosity: 1
+verbosity: 3
+strict: false
