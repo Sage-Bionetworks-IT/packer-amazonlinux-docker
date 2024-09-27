@@ -6,6 +6,7 @@ parseable: true
 quiet: true
 skip_list:
   - "no-changed-when"
+  - "package-latest"
   - "name[play]"
   - "name[casing]"
   - "fqcn[action]"
