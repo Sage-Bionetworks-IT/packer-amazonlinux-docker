@@ -1,6 +1,9 @@
+ci:
+    skip: [ansible-lint]
+
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.6.0
     hooks:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
@@ -9,7 +12,8 @@ repos:
     -   id: pretty-format-json
         args: [--autofix]
 -   repo: https://github.com/ansible/ansible-lint
-    rev: v4.2.0
+    rev: v24.9.2
     hooks:
     -   id: ansible-lint
-        files: packer/.*\.(yaml|yml)$
+        additional_dependencies:
+          - ansible

@@ -1,11 +1,14 @@
 exclude_paths:
-  - .
   - temp
+  - .github
+  - .pre-commit-config.yaml
 parseable: true
 quiet: true
 skip_list:
-  - 301
-  - 305
-  - 306
+  - "no-changed-when"
+  - "name[play]"
+  - "name[casing]"
+  - "fqcn[action]"
+  - "fqcn[action-core]"
 use_default_rules: true
 verbosity: 1
