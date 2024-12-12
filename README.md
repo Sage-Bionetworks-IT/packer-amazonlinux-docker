@@ -38,22 +38,6 @@ source_profile = jsmith@imagecentral
 
 Now you will be able to build an image and deploy it to Imagecentral.
 
-### Manual AMI Build
-If you would like to test building an AMI run:
-```
-cd src
-AWS_PROFILE=packer-service-imagecentral AWS_DEFAULT_REGION=us-east-1 packer build -var AmiImageName=my-test-image -var PACKER_LOG=1 template.json
-```
-
-Packer will do the following:
-* Create a temporary EC2 instance, configure it with shell/ansible/puppet/etc. scripts.
-* Create an AMI from the EC2
-* Delete the EC2
-
-__Notes__:
- * Packer deploys a new AMI to the AWS account specified by the AwsProfile
- * Subsequent builds may require the [-force](https://packer.io/docs/commands/build.html#force) flag
-
 ### Image Accessability
 This project is setup to build publicly accessible images.  To change it to
 build private images please refer to the [packer documentation](https://packer.io/docs/builders/amazon-ebs.html)
@@ -66,6 +50,28 @@ files with [pre-commit](https://pre-commit.com).
 Please install pre-commit, once installed the file validations will
 automatically run on every commit.  Alternatively you can manually
 execute the validations by running `pre-commit run --all-files`.
+
+### Manual AMI Build
+If you would like to test building an AMI run:
+```
+cd src
+packer plugins install github.com/hashicorp/amazon
+packer plugins install github.com/hashicorp/ansible
+AWS_PROFILE=packer-service-imagecentral AWS_DEFAULT_REGION=us-east-1 packer build -var AmiImageName=my-test-image -var PACKER_LOG=1 template.json
+```
+
+Packer will do the following:
+* Create a temporary EC2 instance, configure it with shell/ansible/puppet/etc. scripts.
+* Create an AMI from the EC2
+* Delete the EC2
+
+__Notes__:
+ * Packer deploys a new AMI to the AWS account specified by the AwsProfile
+ * Subsequent builds may require the [-force](https://packer.io/docs/commands/build.html#force) flag
+ * Test AMIs can be built automatically by pushing directly to a branch beginning with `test/`
+
+The process for testing the integration of an AMI with cloudformation init scripts
+is outlined in the [`organizations-infra` docs for service catalog](https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/README.md)
 
 ### CI Workflow
 The workflow to provision AWS AMI is done using pull requests.
