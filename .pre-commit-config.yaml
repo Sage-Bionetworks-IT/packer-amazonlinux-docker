@@ -12,7 +12,7 @@ repos:
     -   id: pretty-format-json
         args: [--autofix]
 -   repo: https://github.com/ansible/ansible-lint
-    rev: v25.6.1
+    rev: v25.7.0
     hooks:
     -   id: ansible-lint
         additional_dependencies:
