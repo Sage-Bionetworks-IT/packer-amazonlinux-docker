@@ -1,6 +1,10 @@
 ci:
     skip: [ansible-lint]
     autoupdate_schedule: monthly
+
+default_language_version:
+  python: python3
+
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -12,7 +16,7 @@ repos:
     -   id: pretty-format-json
         args: [--autofix]
 -   repo: https://github.com/ansible/ansible-lint
-    rev: v25.8.2
+    rev: v25.12.2
     hooks:
     -   id: ansible-lint
         additional_dependencies:
