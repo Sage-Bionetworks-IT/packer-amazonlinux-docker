@@ -4,6 +4,13 @@
 - hosts: all
   become: true
   tasks:
+
+    - name: Supplemental Packages for Amazon Linux
+      ansible.builtin.yum:
+        name: "spal-release"
+        state: present
+        update_cache: true
+
     - name: Upgrade all packages
       ansible.builtin.yum:
         name: "*"
@@ -17,10 +24,13 @@
       with_items:
         - "wget"
         - "git"
+        - "gcc"
         - "python3-pip"
         - "python3-wheel"
+        - "python3-devel"
         - "aws-cfn-bootstrap"
         - "chkconfig"
+        - "docker-compose"
 
     - name: Install python packages
       ansible.builtin.pip:
@@ -33,11 +43,6 @@
       ansible.builtin.command:
         cmd: pip3 freeze
 
-    - name: Install docker
-      ansible.builtin.yum:
-        name: "docker"
-        state: present
-
     - name: Start docker service
       ansible.builtin.service:
         name: docker
@@ -49,18 +54,6 @@
         enabled: true
       with_items:
         - docker
-
-    - name: Create docker plugin dir
-      ansible.builtin.file:
-        path: /usr/local/lib/docker/cli-plugins
-        state: directory
-        mode: '0755'
-
-    - name: Download docker-compose
-      ansible.builtin.get_url:
-        url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
-        dest: /usr/local/lib/docker/cli-plugins/docker-compose
-        mode: +x
 
     - name: Add users to the docker group
       ansible.builtin.user:
